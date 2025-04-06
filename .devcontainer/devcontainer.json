@@ -1,0 +1,26 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "eamodio.gitlens",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "Orta.vscode-jest",
+                "redhat.vscode-yaml"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/cirolosapio/devcontainers-features/alpine-bash:0": {},
+        "ghcr.io/devcontainers/features/git:1": {}
+    },
+    "forwardPorts": [
+        3000
+    ],
+    "remoteUser": "node"
+}
