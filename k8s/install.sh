@@ -24,6 +24,10 @@ helm upgrade --install grafana grafana/grafana \
   --set adminPassword='admin' \
   --set persistence.enabled=true
 
+# helm update --install loki grafana/loki \
+#   --namespace monitoring \
+#   --values ${curdir}/loki-valus.yaml
+
 helm upgrade --install opentelemetry-kube-stack open-telemetry/opentelemetry-kube-stack \
   --namespace monitoring \
   --set opentelemetry-operator.admissionWebhooks.certManager.enabled=false \
