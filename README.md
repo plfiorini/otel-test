@@ -7,23 +7,7 @@ This project demonstrates how to set up OpenTelemetry with a Node.js application
 ```
 otel-test
 ├── k8s
-│   ├── grafana
-│   │   ├── configmap.yaml
-│   │   ├── deployment.yaml
-│   │   └── service.yaml
-│   ├── opentelemetry-collector
-│   │   ├── configmap.yaml
-│   │   ├── deployment.yaml
-│   │   └── service.yaml
-│   ├── prometheus
-│   │   ├── configmap.yaml
-│   │   ├── deployment.yaml
-│   │   └── service.yaml
-│   └── jaeger
-│       ├── deployment.yaml
-│       └── service.yaml
-├── src
-│   ├── api
+├── api
 ```
 
 ## Getting Started
@@ -53,13 +37,11 @@ otel-test
 
 3. **Deploy the OpenTelemetry components:**
 
-   Apply the Kubernetes configurations for Grafana, Prometheus, Jaeger, and the OpenTelemetry Collector:
+   Apply the Kubernetes configurations for Grafana, Prometheus, Tempo, and the OpenTelemetry Collector:
 
    ```bash
-   kubectl apply -f k8s/grafana/
-   kubectl apply -f k8s/prometheus/
-   kubectl apply -f k8s/jaeger/
-   kubectl apply -f k8s/opentelemetry-collector/
+   kubectl apply -f k8s/namespaces.yaml
+   ./k8s/install.sh
    ```
 
 3. **Build and deploy the Node.js application:**
@@ -81,7 +63,7 @@ otel-test
    Port-forward the Grafana service to access it on your local machine:
 
    ```bash
-   kubectl port-forward -n monitoring svc/grafana 8080:3000
+   kubectl port-forward -n monitoring svc/grafana 8080:80
    ```
 
    Then access Grafana in your browser at: http://localhost:8080

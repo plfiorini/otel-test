@@ -1,0 +1,19 @@
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
+
+    - name: Tempo
+      type: tempo
+      url: http://tempo-query.monitoring.svc.cluster.local:16686
+      access: proxy
+      jsonData:
+        tracesToLogsV2:
+          datasourceUid: 'loki'
+        serviceMap:
+          datasourceUid: 'prometheus'
