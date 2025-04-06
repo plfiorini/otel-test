@@ -1,16 +1,16 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
-export class Config {
+export class Config{
     private static instance: Config;
 
-    public tenantUrl: string;
-    public otelToken: string;
+    public otelUrl: string;
+    public prometheusUrl: string;
 
     private constructor(filePath: string) {
         const config = this.loadConfig(filePath);
-        this.tenantUrl = config.tenantUrl;
-        this.otelToken = config.otelToken;
+        this.otelUrl = config.otelUrl;
+        this.prometheusUrl = config.prometheusUrl;
     }
 
     public static getInstance(filePath: string): Config {

@@ -1,8 +1,8 @@
-import "./instrumentation.js";
-
 import { Command } from "commander";
 import * as pkg from "../package.json" with { type: "json" };
 import { startServer } from "./app.js";
+import { Config } from "./core/config.js";
+import { setupTelemetry } from "./instrumentation.js";
 
 const program = new Command();
 
@@ -22,13 +22,12 @@ if (!configPath) {
     throw new Error("Configuration file path must be provided.");
 }
 
-// const config = Config.getInstance(configPath);
-// if (!config.tenantUrl || !config.otelToken) {
-//     throw new Error("Tenant URL and/or API token must be defined in the configuration file.");
-// }
+console.debug(`Starting API with configuration file: ${configPath}`);
+const config = Config.getInstance(configPath);
 
-// console.debug(`Starting Persist with configuration file: ${configPath}`);
-// console.debug(`Tenant URL: ${config.tenantUrl}`);
-// console.debug(`API Token: ${config.otelToken}`);
+setupTelemetry(config.otelUrl, config.prometheusUrl);
+
+console.debug(`OpenTelemetry URL: ${config.otelUrl}`);
+console.debug(`Prometheus URL Token: ${config.prometheusUrl}`);
 
 startServer();

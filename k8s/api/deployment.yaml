@@ -22,6 +22,10 @@ spec:
           ports:
             - containerPort: 3000
               name: http
+          volumeMounts:
+            - name: api-config-volume
+              mountPath: /config/api.yaml
+              subPath: api.yaml
           resources:
             limits:
               cpu: "1"
@@ -41,3 +45,7 @@ spec:
               port: 3000
             initialDelaySeconds: 15
             periodSeconds: 20
+      volumes:
+        - name: api-config-volume
+          configMap:
+            name: api-config
