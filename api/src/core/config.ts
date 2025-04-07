@@ -1,6 +1,11 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
+export type ConfigType = {
+    otelUrl: string;
+    prometheusUrl: string;
+};
+
 export class Config{
     private static instance: Config;
 
@@ -20,10 +25,10 @@ export class Config{
         return Config.instance;
     }
 
-    private loadConfig(filePath: string): any {
+    private loadConfig(filePath: string): ConfigType {
         try {
             const fileContents = fs.readFileSync(filePath, 'utf8');
-            return yaml.load(fileContents);
+            return yaml.load(fileContents) as ConfigType;
         } catch (error) {
             console.error(`Failed to load configuration from ${filePath}:`, error);
             throw error;

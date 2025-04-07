@@ -3,6 +3,7 @@ import { State } from "../state.js";
 import logger from "../logger.js";
 
 export default async function healthRoutes(fastify: FastifyInstance) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fastify.get("/healthz", async (_request: FastifyRequest, _reply: FastifyReply) => {
         const state = State.getInstance();
         const simulateError = state.simulateError > 0 && (Math.random() < state.simulateError / 100);
@@ -23,6 +24,8 @@ export default async function healthRoutes(fastify: FastifyInstance) {
             timestamp: new Date(),
         };
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fastify.get("/readyz", async (_request: FastifyRequest, _reply: FastifyReply) => {
         return {
             status: "ok",

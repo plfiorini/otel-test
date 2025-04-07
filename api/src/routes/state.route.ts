@@ -13,6 +13,7 @@ export default async function stateRoutes(fastify: FastifyInstance) {
                 required: ["simulateError", "simulateSlow"],
             },
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     }, async (request: FastifyRequest, reply: FastifyReply) => {
         const { simulateError, simulateSlow } = request.body as StateType;
         const state = State.getInstance();

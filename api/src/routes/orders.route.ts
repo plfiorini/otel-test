@@ -21,6 +21,7 @@ type OrdersResponse = {
 };
 
 export default async function ordersRoutes(fastify: FastifyInstance) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fastify.get("/external/ok", async (_request: FastifyRequest, _reply: FastifyReply) => {
         const external: ExternalData[] = [];
 
@@ -45,7 +46,7 @@ export default async function ordersRoutes(fastify: FastifyInstance) {
             },
             external,
             timestamp: new Date(),
-        };
+        } as OrdersResponse;
     });
 
     fastify.get("/external/500", async (_request: FastifyRequest, reply: FastifyReply) => {
