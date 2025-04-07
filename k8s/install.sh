@@ -20,9 +20,8 @@ helm upgrade --install tempo grafana/tempo \
 
 helm upgrade --install grafana grafana/grafana \
   --namespace monitoring \
-  --values ${curdir}/grafana-values.yaml \
-  --set adminPassword='admin' \
-  --set persistence.enabled=true
+  --create-namespace \
+  --values ${curdir}/grafana-values.yaml
 
 # helm update --install loki grafana/loki \
 #   --namespace monitoring \
@@ -30,5 +29,6 @@ helm upgrade --install grafana grafana/grafana \
 
 helm upgrade --install opentelemetry-kube-stack open-telemetry/opentelemetry-kube-stack \
   --namespace monitoring \
+  --create-namespace \
   --set opentelemetry-operator.admissionWebhooks.certManager.enabled=false \
   --set admissionWebhooks.autoGenerateCert.enabled=true

@@ -1,4 +1,6 @@
 tempo:
+  metricsGenerator:
+    enabled: true
   storage:
     trace:
       backend: local
