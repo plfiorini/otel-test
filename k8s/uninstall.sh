@@ -2,8 +2,8 @@
 
 set -e
 
-helm uninstall opentelemetry-kube-stack --namespace monitoring || true
-# helm uninstall loki --namespace monitoring || true
-helm uninstall grafana --namespace monitoring || true
-helm uninstall tempo --namespace monitoring || true
-helm uninstall prometheus --namespace monitoring || true
+helm uninstall --namespace monitoring otel-collector || true
+helm uninstall --namespace monitoring tempo || true
+helm uninstall --namespace monitoring loki || true
+helm uninstall --namespace monitoring grafana || true
+helm uninstall --namespace monitoring prometheus || true

@@ -13,3 +13,10 @@ tempo:
 # Enable Tempo Query frontend for easier integration with Grafana
 tempoQuery:
   enabled: true
+
+traces:
+  otlp:
+    grpc:
+      enabled: true
+    http:
+      enabled: true

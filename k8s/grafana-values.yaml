@@ -1,6 +1,10 @@
 adminUser: admin
 adminPassword: admin
 
+service:
+  enabled: true
+  type: LoadBalancer
+
 persistence:
   type: pvc
   enabled: true
