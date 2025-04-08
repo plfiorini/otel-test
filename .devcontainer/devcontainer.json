@@ -11,7 +11,8 @@
                 "GitHub.copilot",
                 "GitHub.copilot-chat",
                 "Orta.vscode-jest",
-                "redhat.vscode-yaml"
+                "redhat.vscode-yaml",
+                "biomejs.biome"
             ]
         }
     },
