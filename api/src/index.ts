@@ -1,8 +1,8 @@
 import { Command } from "commander";
 import * as pkg from "../package.json" with { type: "json" };
-import { startServer } from "./app.js";
-import { Config } from "./core/config.js";
-import { setupTelemetry } from "./instrumentation.js";
+import { startServer } from "./app.ts";
+import { setupTelemetry } from "./instrumentation.ts";
+import * as configLoader from "./core/config.ts";
 
 const program = new Command();
 
@@ -27,7 +27,10 @@ if (!configPath) {
 }
 
 console.debug(`Starting API with configuration file: ${configPath}`);
-const config = Config.getInstance(configPath);
+const config = configLoader.getConfig(configPath);
+if (!config) {
+	throw new Error("Failed to load configuration.");
+}
 
 setupTelemetry(config.otelUrl, config.prometheusUrl);
 

@@ -1,37 +1,33 @@
-import * as fs from "fs";
-import * as yaml from "js-yaml";
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import { z } from 'zod';
 
-export type ConfigType = {
-	otelUrl: string;
-	prometheusUrl: string;
-};
+// Define the schema using zod
+const ConfigSchema = z.object({
+    otelUrl: z.string().url(),
+    prometheusUrl: z.string().url(),
+});
 
-export class Config {
-	private static instance: Config;
+// Infer the ConfigType from the schema
+export type ConfigType = z.infer<typeof ConfigSchema>;
 
-	public otelUrl: string;
-	public prometheusUrl: string;
+// Singleton instance to store the loaded config
+let configInstance: ConfigType | null = null;
 
-	private constructor(filePath: string) {
-		const config = this.loadConfig(filePath);
-		this.otelUrl = config.otelUrl;
-		this.prometheusUrl = config.prometheusUrl;
-	}
+// Function to load and validate the config file
+export function loadConfig(filePath: string): ConfigType {
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const parsedConfig = yaml.load(fileContent);
 
-	public static getInstance(filePath: string): Config {
-		if (!Config.instance) {
-			Config.instance = new Config(filePath);
-		}
-		return Config.instance;
-	}
+    // Validate the parsed config against the schema
+    return ConfigSchema.parse(parsedConfig);
+}
 
-	private loadConfig(filePath: string): ConfigType {
-		try {
-			const fileContents = fs.readFileSync(filePath, "utf8");
-			return yaml.load(fileContents) as ConfigType;
-		} catch (error) {
-			console.error(`Failed to load configuration from ${filePath}:`, error);
-			throw error;
-		}
-	}
+// Function to get an existing configuration or load it if not already loaded
+export function getConfig(filePath: string): ConfigType {
+    if (configInstance) {
+        return configInstance;
+    }
+    configInstance = loadConfig(filePath);
+    return configInstance;
 }
