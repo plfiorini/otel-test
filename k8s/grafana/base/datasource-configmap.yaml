@@ -8,16 +8,16 @@ data:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://prometheus.monitoring.svc.cluster.local:9090
+      url: http://prometheus:9090
       access: proxy
       isDefault: true
     - name: Alloy
       type: prometheus
-      url: http://alloy.monitoring.svc.cluster.local:8080/prometheus
+      url: http://alloy:8080/prometheus
       access: proxy
     - name: Tempo
       type: tempo
-      url: http://tempo.monitoring.svc.cluster.local:3100
+      url: http://tempo:3100
       access: proxy
       jsonData:
         httpMethod: GET
@@ -25,7 +25,7 @@ data:
           datasourceUid: 'prometheus'
     - name: Loki
       type: loki
-      url: http://loki.monitoring.svc.cluster.local:3100
+      url: http://loki:3100
       access: proxy
       jsonData:
         derivedFields:
