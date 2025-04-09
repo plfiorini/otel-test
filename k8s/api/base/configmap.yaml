@@ -5,4 +5,4 @@ metadata:
 data:
   api.yaml: |
     otelUrl: "http://tempo:4317"
-    prometheusUrl: "http://prometheus-server:9090"
+    prometheusUrl: "http://prometheus:9090"
