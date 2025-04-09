@@ -22,9 +22,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@tsconfig/node-ts": "^23.6.1",
+    "@tsconfig/node22": "^22.0.1",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.13.14",
-    "globals": "^16.0.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   },
