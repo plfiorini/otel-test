@@ -2,8 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: api-config
-  namespace: otel-test
 data:
   api.yaml: |
-    otelUrl: "http://opentelemetry-kube-stack-daemon-collector:4317"
+    otelUrl: "http://tempo.monitoring.svc.cluster.local:4317"
     prometheusUrl: "http://prometheus-server.monitoring.svc.cluster.local:9090"
