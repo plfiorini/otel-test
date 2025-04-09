@@ -1,8 +1,8 @@
 import { Command } from "commander";
 import * as pkg from "../package.json" with { type: "json" };
 import { startServer } from "./app.ts";
-import { setupTelemetry } from "./instrumentation.ts";
 import * as configLoader from "./core/config.ts";
+import { setupTelemetry } from "./instrumentation.ts";
 
 const program = new Command();
 

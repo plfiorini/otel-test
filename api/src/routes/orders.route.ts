@@ -38,9 +38,6 @@ export default async function ordersRoutes(fastify: FastifyInstance) {
 						console.error(`Error fetching external data: ${error}`);
 						return null;
 					});
-				if (!externalData) {
-					continue;
-				}
 			}
 
 			return {
