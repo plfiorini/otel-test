@@ -6,19 +6,19 @@ data:
   config.alloy: |
     prometheus.remote_write "local" {
       endpoint {
-        url = "http://mimir:9009/api/v1/push"
+        url = "http://mimir.monitoring.svc.cluster.local:9009/api/v1/push"
       }
     }
 
     loki.write "local" {
       endpoint {
-        url = "http://loki:3100/loki/api/v1/push"
+        url = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
       }
     }
 
     otelcol.exporter.otlp "local" {
       client {
-        endpoint = "tempo:4317"
+        endpoint = "tempo.monitoring.svc.cluster.local:4317"
       }
     }
 
@@ -28,7 +28,7 @@ data:
       ]
       targets = [
         {
-          "__address__" = "prometheus:9090",
+          "__address__" = "prometheus.monitoring.svc.cluster.local:9090",
         },
       ]
     }
