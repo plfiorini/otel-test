@@ -8,6 +8,10 @@ import {
 	ATTR_SERVICE_VERSION,
 } from "@opentelemetry/semantic-conventions";
 import * as pkg from "../package.json" with { type: "json" };
+import { diag, DiagConsoleLogger, DiagLogLevel } from "@opentelemetry/api";
+
+// Enable diagnostic logging for debugging
+diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
 export function setupTelemetry(otelUrl: string, prometheusUrl: string) {
 	const sdk = new NodeSDK({
