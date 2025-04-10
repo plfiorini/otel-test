@@ -11,4 +11,7 @@ spec:
     - port: 80
       targetPort: 3000
       name: http
+    - port: 9464
+      targetPort: metrics
+      name: metrics
   type: ClusterIP

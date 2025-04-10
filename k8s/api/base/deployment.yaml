@@ -21,6 +21,8 @@ spec:
           ports:
             - containerPort: 3000
               name: http
+            - containerPort: 9464
+              name: metrics
           volumeMounts:
             - name: api-config-volume
               mountPath: /config/api.yaml

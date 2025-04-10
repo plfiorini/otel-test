@@ -4,5 +4,5 @@ metadata:
   name: api-config
 data:
   api.yaml: |
-    otelUrl: "http://tempo.monitoring.svc.cluster.local:4317"
-    prometheusUrl: "http://prometheus.monitoring.svc.cluster.local:9090"
+    otelUrl: "http://tempo.monitoring.svc.cluster.local:4318"
+    prometheusUrl: "prometheus.monitoring.svc.cluster.local:9090"

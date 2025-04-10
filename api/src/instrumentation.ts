@@ -20,7 +20,7 @@ export function setupTelemetry(otelUrl: string, prometheusUrl: string) {
 		}),
 		instrumentations: [getNodeAutoInstrumentations()],
 		metricReader: new PrometheusExporter({
-			endpoint: prometheusUrl,
+			port: 9464,
 		}),
 		resource: resourceFromAttributes({
 			[ATTR_SERVICE_NAME]: pkg.default.name,
