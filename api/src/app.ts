@@ -4,6 +4,7 @@ import ordersRoutes from "./routes/orders.route.js";
 import stateRoutes from "./routes/state.route.js";
 import diceRoutes from "./routes/dice.route.ts";
 import { errorHandler } from "./core/errors.ts";
+import metricsRoute from "./routes/metrics.route.ts";
 
 export async function buildApp() {
 	const app = fastify({
@@ -21,6 +22,7 @@ export async function buildApp() {
 	});
 
 	// Register routes
+	await app.register(metricsRoute);
 	await app.register(healthRoutes);
 	await app.register(stateRoutes);
 	await app.register(ordersRoutes);
