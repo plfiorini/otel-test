@@ -219,6 +219,7 @@ services:
       #- OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4318/v1/traces
       - PROMETHEUS_PORT=9464
       - LOKI_URL=http://loki:3100
+      - PYROSCOPE_URL=http://pyroscope:4040
     ports:
       - "8080:8080"
     networks:
@@ -227,6 +228,7 @@ services:
       - loki
       - jaeger
       #- tempo
+      - pyroscope
 
 networks:
   monitoring:

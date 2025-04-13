@@ -2,6 +2,10 @@
 import { sdk } from "./instrumentation.ts";
 sdk.start();
 
+// Pyroscope
+import { initPyroscope } from "./pyroscope.ts";
+initPyroscope();
+
 import { Command } from "commander";
 import * as pkg from "../package.json" with { type: "json" };
 import { startServer } from "./app.ts";
