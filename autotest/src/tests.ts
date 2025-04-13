@@ -43,6 +43,13 @@ export async function runAllTests(server: string): Promise<void> {
                 }
             });
     }, 5000);
+
+    // Sometimes roll the dice
+    setInterval(() => {
+        testDiceRoll(apiClient)
+            .then(() => console.log('Dice roll check passed'))
+            .catch((error) => console.error('Dice roll check failed:', error));
+    }, 3000);
 }
 
 export async function runHealthTest(server: string): Promise<void> {
@@ -74,4 +81,8 @@ async function testExternal500(apiClient: HttpClient): Promise<void> {
 
 async function testExternalSlow(apiClient: HttpClient): Promise<void> {
     await apiClient.get('/external/slow');
+}
+
+async function testDiceRoll(apiClient: HttpClient): Promise<void> {
+    await apiClient.get('/dice/roll?rolls=300');
 }
