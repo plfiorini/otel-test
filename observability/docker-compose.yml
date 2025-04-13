@@ -1,0 +1,210 @@
+# docker-compose.yml
+
+#version: '3.8'
+
+services:
+  # ===============================================================
+  # Prometheus - Metrics collection and storage
+  # ===============================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:Z
+      - prometheus_data:/prometheus
+    # command:
+    #   - '--config.file=/etc/prometheus/prometheus.yml'
+    #   - '--storage.tsdb.path=/prometheus'
+    #   - '--web.console.libraries=/etc/prometheus/console_libraries'
+    #   - '--web.console.templates=/etc/prometheus/consoles'
+    #   - '--web.enable-lifecycle'
+    #   - '--enable-feature=exemplar-storage'
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+
+  # ===============================================================
+  # Node Exporter - System metrics exporter
+  # ===============================================================
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring
+
+  # ===============================================================
+  # Grafana - Visualization platform
+  # ===============================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:Z
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-piechart-panel
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+      - jaeger
+      - mimir
+      - pyroscope
+
+  # ===============================================================
+  # Loki - Log aggregation system
+  # ===============================================================
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    volumes:
+      - ./loki/config.yml:/etc/loki/config.yml:Z
+      - loki_data:/loki
+    command: -config.file=/etc/loki/config.yml
+    ports:
+      - "3100:3100"
+    networks:
+      - monitoring
+
+  # ===============================================================
+  # Promtail - Log collector for Loki
+  # ===============================================================
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - ./promtail/config.yml:/etc/promtail/config.yml
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    ports:
+      - "9080:9080"
+    networks:
+      - monitoring
+    depends_on:
+      - loki
+
+  # ===============================================================
+  # Tempo - Distributed tracing backend
+  # ===============================================================
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    restart: unless-stopped
+    volumes:
+      - ./tempo/tempo.yml:/etc/tempo/tempo.yml:Z
+      - tempo_data:/tmp/tempo
+    command: -config.file=/etc/tempo/tempo.yml
+    ports:
+      - "3200:3200"  # tempo
+      - "4317:4317"  # otlp grpc
+      - "4318:4318"  # otlp http
+      - "9411:9411"  # zipkin
+    networks:
+      - monitoring
+
+  # ===============================================================
+  # Jaeger - Distributed tracing system
+  # ===============================================================
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    restart: unless-stopped
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686" # UI
+      - "14250:14250" # Jaeger acceptance
+      - "14268:14268" # Jaeger HTTP
+      - "14269:14269" # Admin port
+    networks:
+      - monitoring
+
+  # ===============================================================
+  # Mimir - Horizontally scalable, highly available, multi-tenant metrics
+  # ===============================================================
+  mimir:
+    image: grafana/mimir:latest
+    container_name: mimir
+    restart: unless-stopped
+    volumes:
+      - ./mimir/config.yml:/etc/mimir/config.yml:Z
+      - mimir_data:/tmp/mimir
+    command: -config.file=/etc/mimir/config.yml
+    ports:
+      - "9009:9009" # API and UI
+    networks:
+      - monitoring
+
+  # ===============================================================
+  # Pyroscope - Continuous profiling platform
+  # ===============================================================
+  pyroscope:
+    image: grafana/pyroscope:latest
+    container_name: pyroscope
+    restart: unless-stopped
+    volumes:
+      - pyroscope_data:/var/lib/pyroscope
+    ports:
+      - "4040:4040"
+    command: "server"
+    networks:
+      - monitoring
+
+  # ===============================================================
+  # Test application
+  # ===============================================================
+  api:
+    container_name: api
+    restart: unless-stopped
+    build:
+      context: ../api
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+      #- OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4318/v1/traces
+      - PROMETHEUS_PORT=9464
+    #ports:
+      #- "3000:3000"
+    networks:
+      - monitoring
+    depends_on:
+      - tempo
+      - jaeger
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  loki_data:
+  tempo_data:
+  mimir_data:
+  pyroscope_data:
