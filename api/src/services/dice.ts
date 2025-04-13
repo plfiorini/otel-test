@@ -1,4 +1,4 @@
-import { metrics, trace, type Attributes, type Meter, type Span, type Tracer } from "@opentelemetry/api";
+import { metrics, trace, type Attributes, type Counter, type Meter, type Span, type Tracer } from "@opentelemetry/api";
 
 const tracer: Tracer = trace.getTracer("dice-service");
 const meter: Meter = metrics.getMeter("dice-service");

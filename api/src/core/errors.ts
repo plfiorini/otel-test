@@ -1,3 +1,5 @@
+import type { FastifyReply, FastifyRequest } from "fastify";
+
 export class ApiError extends Error {
     public statusCode: number;
 
