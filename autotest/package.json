@@ -1,0 +1,28 @@
+{
+  "name": "autotest",
+  "version": "1.0.0",
+  "description": "Calls APIs on intervals",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx --watch src/index.ts -- --server=http://localhost:8080",
+    "all": "tsx --watch src/index.ts -- --server=http://localhost:8080 --case=all",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pier Luigi Fiorini",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "ts-node": {
+    "files": true
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "commander": "^13.1.0"
+  }
+}
