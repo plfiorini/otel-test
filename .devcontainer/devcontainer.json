@@ -21,7 +21,7 @@
         "ghcr.io/devcontainers/features/git:1": {}
     },
     "forwardPorts": [
-        3000
+        8000
     ],
     "remoteUser": "node"
 }
