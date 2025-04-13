@@ -1,0 +1,32 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+jaeger_storage:
+  backends:
+    trace_storage:
+      memory:
+        max_traces: 100000
+  metric_backends:
+    metrics_storage:
+      prometheus:
+        endpoint: http://prometheus:9090
+        normalize_calls: true
+        normalize_duration: true
+
+jaeger_query:
+  storage:
+    traces: trace_storage
+    metrics: metrics_storage
+  base_path: /
+  ui:
+    config_file: /etc/jaeger/ui-config.json
+    log_access: true
+  grpc:
+    endpoint: 0.0.0.0:16685
+  http:
+    endpoint: 0.0.0.0:16686

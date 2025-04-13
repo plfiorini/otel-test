@@ -1,17 +1,24 @@
 import { pino } from "pino";
 
 const logger = pino({
-	level: process.env.LOG_LEVEL || "info",
-	transport:
-		process.env.NODE_ENV !== "production"
-			? {
-					target: "pino-pretty",
-					options: {
-						colorize: true,
-					},
-				}
-			: undefined,
 	name: "api",
+	level: process.env.LOG_LEVEL || "debug",
+	transport: {
+		targets: [
+			{
+				target: "pino-opentelemetry-transport",
+				options: {
+					// ...specific options for OpenTelemetry transport...
+				}
+			},
+			{
+				target: "pino-pretty",
+				options: {
+					colorize: true
+				}
+			}
+		]
+	}
 });
 
 export default logger;

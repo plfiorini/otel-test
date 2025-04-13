@@ -35,4 +35,4 @@ RUN npm install --omit=dev
 EXPOSE 3000
 
 # Start the application
-CMD ["node", "/app/dist/index.js", "-c", "/config/api.yaml"]
+CMD ["node", "/app/dist/index.js"]

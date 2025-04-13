@@ -1,3 +1,4 @@
+import logger from "@/logger.ts";
 import { metrics, trace, type Attributes, type Counter, type Meter, type Span, type Tracer } from "@opentelemetry/api";
 
 const tracer: Tracer = trace.getTracer("dice-service");
@@ -14,6 +15,7 @@ const counter: Counter<Attributes> = meter.createCounter("dice-service.rolls.cou
 export function rollOnce(min: number, max: number): number {
     return tracer.startActiveSpan("rollDice", (span: Span) => {
         const result = Math.floor(Math.random() * (max - min + 1)) + min;
+        logger.info(`Rolling dice once: ${min} - ${max} = ${result}`);
         span.setAttributes({ "dice-service.result": result });
         counter.add(1);
         span.end();
@@ -26,6 +28,7 @@ export function rollMultiple(times: number, min: number, max: number): number[] 
         const results: number[] = [];
         for (let i = 0; i < times; i++) {
             const result = Math.floor(Math.random() * (max - min + 1)) + min;
+            logger.info(`Rolling dice ${i}: ${min} - ${max} = ${result}`);
             results.push(result);
             span.setAttributes({ [`dice-service.result.${i}`]: result });
             counter.add(1);

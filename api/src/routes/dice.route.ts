@@ -14,7 +14,7 @@ export default async function diceRoutes(fastify: FastifyInstance) {
 
             const rolls = parseResult.data.rolls ?? 1; // Default to 1 roll if not provided
             return {
-                result: diceService.rollMultiple(rolls, 1, 6),
+                result: diceService.rollMultiple(rolls, 1, 20),
             };
         },
     );
