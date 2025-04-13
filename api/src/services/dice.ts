@@ -1,4 +1,4 @@
-import logger from "@/logger.js";
+import logger from "../logger.ts";
 import { trace, type Attributes, type Span, type Tracer } from "@opentelemetry/api";
 import { Counter, Histogram, register } from "prom-client";
 

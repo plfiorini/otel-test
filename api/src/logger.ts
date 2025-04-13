@@ -6,9 +6,6 @@ const logger = pino({
 	transport: {
 		targets: [
 			{
-				target: "pino-opentelemetry-transport",
-			},
-			{
 				target: "pino-loki-transport",
 				options: {
 					lokiUrl: process.env.LOKI_URL,
