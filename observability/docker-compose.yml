@@ -58,7 +58,8 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-piechart-panel
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor metricsSummary
+      - GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-exploretraces-app/grafana-exploretraces-app-latest.zip;grafana-traces-app;grafana-clock-panel,grafana-piechart-panel
     ports:
       - "3000:3000"
     networks:
@@ -105,24 +106,37 @@ services:
     depends_on:
       - loki
 
-#   # ===============================================================
-#   # Tempo - Distributed tracing backend
-#   # ===============================================================
-#   tempo:
-#     image: grafana/tempo:latest
-#     container_name: tempo
-#     restart: unless-stopped
-#     volumes:
-#       - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro,Z
-#       - tempo_data:/tmp/tempo
-#     command: -config.file=/etc/tempo/tempo.yml
-#     ports:
-#       - "3200:3200"  # tempo
-#       - "4317:4317"  # otlp grpc
-#       - "4318:4318"  # otlp http
-#       - "9411:9411"  # zipkin
-#     networks:
-#       - monitoring
+  # ===============================================================
+  # Tempo - Distributed tracing backend
+  # ===============================================================
+
+  # tempo:
+  #   image: grafana/tempo:latest
+  #   container_name: tempo
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro,Z
+  #     - tempo_data:/tmp/tempo
+  #   ports:
+  #     - "3200:3200"  # tempo
+  #     # - "9095:9095" # tempo grpc
+  #     # - "4317:4317"  # otlp grpc
+  #     # - "4318:4318"  # otlp http
+  #     # - "9411:9411"  # zipkin
+  #   networks:
+  #     - monitoring
+
+  k6-tracing:
+    image: ghcr.io/grafana/xk6-client-tracing:v0.0.7
+    environment:
+      #- ENDPOINT=tempo:4317
+      - ENDPOINT=jaeger:4317
+    restart: always
+    networks:
+      - monitoring
+    depends_on:
+      #- tempo
+      - jaeger
 
   # ===============================================================
   # Jaeger - Distributed tracing system
@@ -138,10 +152,10 @@ services:
     #   - '--config=file:/etc/jaeger/config.yml'
     ports:
       - "16686:16686" # UI
-      - "4317:4317" # gRPC
-      - "4318:4318" # HTTP
-      - "5778:5778" # Agent
-      - "9411:9411" # Zipkin
+      # - "4317:4317" # gRPC
+      # - "4318:4318" # HTTP
+      # - "5778:5778" # Agent
+      # - "9411:9411" # Zipkin
     networks:
       - monitoring
 
@@ -189,7 +203,8 @@ services:
       - PORT=8080
       - OTEL_EXPORTER_OTLP_LOGS_PROTOCOL=http/protobuf
       - OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318/v1/traces
+      #- OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318/v1/traces
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4318/v1/traces
       - PROMETHEUS_PORT=9464
       - LOKI_URL=http://loki:3100
     ports:
@@ -199,6 +214,7 @@ services:
     depends_on:
       - loki
       - jaeger
+      #- tempo
 
 networks:
   monitoring:
