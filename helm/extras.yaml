@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+  name: ingress
+  namespace: monitoring
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: grafana
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xk6-tracing
+  namespace: monitoring
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: xk6-tracing
+      name: xk6-tracing
+  template:
+    metadata:
+      labels:
+        app: xk6-tracing
+        name: xk6-tracing
+    spec:
+      containers:
+        - env:
+            - name: ENDPOINT
+              value: tempo.monitoring.svc.cluster.local:4317
+          image: ghcr.io/grafana/xk6-client-tracing:latest
+          imagePullPolicy: IfNotPresent
+          name: xk6-tracing
+          command: ["run", "/template.js"]
+          volumeMounts:
+            - name: template-js
+              mountPath: /template.js
+              readOnly: true
+      volumes:
+        - name: template-js
+          hostPath:
+            path: ./template.js
+            type: File
