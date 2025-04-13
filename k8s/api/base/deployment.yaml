@@ -46,6 +46,15 @@ spec:
               port: 3000
             initialDelaySeconds: 15
             periodSeconds: 20
+          env:
+            - name: PORT
+              value: "3000"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://jaeger.monitoring.svc.cluster.local:4317"
+            #- name: OTEL_EXPORTER_OTLP_ENDPOINT
+            #  value: "http://jaeger.monitoring.svc.cluster.local:4318/v1/traces"
+            - name: PROMETHEUS_PORT
+              value: "9464"
       volumes:
         - name: api-config-volume
           configMap:
