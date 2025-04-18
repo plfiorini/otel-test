@@ -1,0 +1,14 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/go:1-1.22-bookworm",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.Go",
+                "eamodio.gitlens",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "redhat.vscode-yaml"
+            ]
+        }
+    }
+}
