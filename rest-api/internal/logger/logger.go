@@ -19,6 +19,17 @@ func New(cfg config.Config) (*zap.Logger, func(), error) {
 	if zapCfg.Encoding == "console" {
 		zapCfg.EncoderConfig = zap.NewDevelopmentEncoderConfig()
 		zapCfg.EncoderConfig.EncodeLevel = colorLevelEncoder
+
+		// Pino-like formatting:
+		zapCfg.EncoderConfig.TimeKey = "time"
+		zapCfg.EncoderConfig.LevelKey = "level"
+		zapCfg.EncoderConfig.NameKey = "logger"
+		zapCfg.EncoderConfig.CallerKey = "caller"
+		zapCfg.EncoderConfig.MessageKey = "msg"
+		zapCfg.EncoderConfig.StacktraceKey = "stack"
+		zapCfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+		zapCfg.EncoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
+		zapCfg.EncoderConfig.ConsoleSeparator = " " // Use space instead of tab
 	}
 	logger, err := zapCfg.Build()
 	if err != nil {
