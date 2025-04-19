@@ -8,12 +8,12 @@ http:
     allow_credentials: true
 
 logger:
-  level: info # debug, info, warn, error, dpanic, panic, fatal
-  #encoding: json # json or console
-  encoding: console
+  level: debug # debug, info, warn, error, dpanic, panic, fatal
+  encoding: json # json or console
+  #encoding: console
   outputPaths: [stdout] # e.g., [stdout, logs/app.log]
   errorOutputPaths: [stderr]
 
 otel:
-  enabled: false
+  enabled: true
   endpoint: "http://localhost:4317"

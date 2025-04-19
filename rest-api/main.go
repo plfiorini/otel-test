@@ -48,7 +48,10 @@ func main() {
 		AllowCredentials: cfg.Http.Cors.AllowCredentials,
 	})
 
+	// Create a new HTTP multiplexer
 	mux := http.NewServeMux()
+
+	// Set up routes
 	mux.HandleFunc("/healthz", health.Healthz)
 	mux.HandleFunc("/readyz", health.Readyz)
 

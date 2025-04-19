@@ -1,8 +1,10 @@
 package logger
 
 import (
+	"context"
 	"rest-api/internal/config"
 
+	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -77,4 +79,17 @@ func colorLevelEncoder(level zapcore.Level, enc zapcore.PrimitiveArrayEncoder) {
 		color = "\033[0m" // Reset
 	}
 	enc.AppendString(color + level.CapitalString() + "\033[0m")
+}
+
+// WithTrace returns a logger with trace_id and span_id fields from the context, if available.
+func WithTrace(ctx context.Context, logger *zap.Logger) *zap.Logger {
+	span := trace.SpanFromContext(ctx)
+	sc := span.SpanContext()
+	if !sc.IsValid() {
+		return logger
+	}
+	return logger.With(
+		zap.String("trace_id", sc.TraceID().String()),
+		zap.String("span_id", sc.SpanID().String()),
+	)
 }
