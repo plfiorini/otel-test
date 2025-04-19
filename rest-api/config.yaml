@@ -13,3 +13,7 @@ logger:
   encoding: console
   outputPaths: [stdout] # e.g., [stdout, logs/app.log]
   errorOutputPaths: [stderr]
+
+otel:
+  enabled: false
+  endpoint: "http://localhost:4317"

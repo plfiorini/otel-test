@@ -28,6 +28,10 @@ type Config struct {
 		OutputPaths      []string `json:"outputPaths" yaml:"outputPaths"`
 		ErrorOutputPaths []string `json:"errorOutputPaths" yaml:"errorOutputPaths"`
 	} `json:"logger" yaml:"logger"`
+	Otel struct {
+		Enabled  bool   `json:"enabled" yaml:"enabled" default:"false"`
+		Endpoint string `json:"endpoint" yaml:"endpoint" validate:"omitempty,url" default:"http://localhost:4318/v1/traces"`
+	} `json:"otel" yaml:"otel"`
 }
 
 // Load loads and validates the configuration from a file (YAML or JSON).
