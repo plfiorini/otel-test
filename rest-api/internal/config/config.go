@@ -30,7 +30,9 @@ type Config struct {
 	} `json:"logger" yaml:"logger"`
 	Otel struct {
 		Enabled  bool   `json:"enabled" yaml:"enabled" default:"false"`
-		Endpoint string `json:"endpoint" yaml:"endpoint" validate:"omitempty,url" default:"http://localhost:4318/v1/traces"`
+		Endpoint string `json:"endpoint" yaml:"endpoint" validate:"omitempty,url" default:"http://localhost:4318"`
+		Protocol string `json:"protocol" yaml:"protocol" default:"http"`  // "http" or "grpc"
+		Insecure bool   `json:"insecure" yaml:"insecure" default:"false"` // true disables TLS
 	} `json:"otel" yaml:"otel"`
 }
 

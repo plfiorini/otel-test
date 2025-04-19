@@ -16,4 +16,8 @@ logger:
 
 otel:
   enabled: true
-  endpoint: "http://localhost:4317"
+  #endpoint: "http://localhost:4317"
+  #protocol: "grpc" # http or grpc
+  endpoint: "http://localhost:4318"
+  protocol: "http" # http or grpc
+  insecure: true # set to true to disable TLS
